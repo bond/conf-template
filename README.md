@@ -1,5 +1,8 @@
 # conf-template
 
+## Demo
+https://s3.eu-central-1.amazonaws.com/bondpub/index.html
+
 ## Project setup
 ```
 npm install
@@ -9,11 +12,13 @@ npm install
 ```
 npm run serve
 ```
+PS: Consult vue.config.js for public url
 
 ### Compiles and minifies for production
 ```
 npm run build
 ```
+PS: Consult vue.config.js for public path
 
 ### Run your tests
 ```

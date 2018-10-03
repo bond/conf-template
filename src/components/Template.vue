@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
       <v-layout>
-        <h1 class="font-weight-light">Super-slick config generat0rz</h1>
+        <h1 class="font-weight-light">Config template tool</h1>
       </v-layout>
       <v-layout>
         <h2>Devices</h2>
@@ -23,7 +23,7 @@
             <v-list-tile>
               <span class="subheading">Create</span>
               <v-chip
-                :color="`${colors[nonce - 1]} lighten-3`"
+                :color="`${colors[(model.length +1) % colors.length]} lighten-3`"
                 label
                 small
               >
@@ -124,7 +124,7 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
       </v-layout>
-      <v-layout>
+      <v-layout mt-4>
         <h2>Template</h2>
       </v-layout>
       <v-layout>
@@ -148,19 +148,27 @@
             v-for="(device, i) in model"
             :key="i"
           >
-            <div slot="header"><b>{{device.text}}</b></div>
-            <v-card>
-              <v-card-text v-if="dev_compliance(i)">
+            <div slot="header"><v-icon left :color="device.color">description</v-icon><b>{{device.text}}</b></div>
+            <v-card v-if="dev_compliance(i)">
+              <v-card-text>
 <code style="width:100%">
 {{ generated_config(i) }}
-</code>                
+</code>
               </v-card-text>
-              <v-card-text v-else>
+              <v-card-actions>
+                <v-btn flat color="blue" @click="download(i)"><v-icon left>cloud_download</v-icon>Download</v-btn>
+              </v-card-actions>
+            </v-card>
+            <v-card v-else>
+              <v-card-text>
                 Fix variables first!
               </v-card-text>
             </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
+      </v-layout>
+      <v-layout mt-4>
+        <v-btn color="primary" large @click="download(-1)"><v-icon left>cloud_download</v-icon>Download all configs</v-btn>
       </v-layout>
   </v-container>
 </template>
@@ -180,17 +188,12 @@ export default {
   data() {
     return {
       template: "interface loopback1\n  ip address $loopback/32",
-      tvars: {},
-      activator: null,
-      attach: null,
       colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
       editing: null,
       index: -1,
       items: [
         { header: 'Select an device or create one' },
       ],
-      nonce: 1,
-      menu: false,
       model: [
       ],
       x: 0,
@@ -206,12 +209,10 @@ export default {
           if (typeof v === 'string') {
             v = {
               text: v,
-              color: this.colors[this.nonce - 1]
+              color: this.colors[this.model.length % this.colors.length]
             }
 
             this.items.push(v)
-
-            this.nonce++
           }
 
           return v
@@ -219,6 +220,26 @@ export default {
       }
     },
   methods: {
+      download(dev_idx) {
+        if (dev_idx == -1) {
+          // download all
+          this.model.forEach((d, idx) => {
+            if (this.dev_compliance(idx)) {
+              this.download(idx)
+            }
+          })
+          return
+        }
+
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.generated_config(dev_idx)));
+        element.setAttribute('download', `config-${this.model[dev_idx].text}.cfg.txt`);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        //cleanup
+        document.body.removeChild(element);
+      },
       var_compliance(var_name) {
         var missing = 0
           this.model.forEach(m => {

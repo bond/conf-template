@@ -1,9 +1,9 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify'
-Vue.use(Vuetify)
-//import 'vuetify/src/stylus/app.styl'
-import 'vuetify/dist/vuetify.min.css'
-/*
+//import Vuetify from 'vuetify'
+//Vue.use(Vuetify)
+
+//import 'vuetify/dist/vuetify.min.css'
+
 import {
   Vuetify,
   VApp,
@@ -11,6 +11,8 @@ import {
   VSubheader,
   VDivider,
   VFooter,
+  VForm,
+  VTextField,
   VList,
   VBtn,
   VIcon,
@@ -18,10 +20,13 @@ import {
   VToolbar,
   VTextarea,
   VCard,
+  VChip,
+  VCombobox,
+  VExpansionPanel,
   transitions
 } from 'vuetify'
 
-
+import 'vuetify/src/stylus/app.styl'
 
 Vue.use(Vuetify, {
   components: {
@@ -30,15 +35,19 @@ Vue.use(Vuetify, {
     VSubheader,
     VDivider,
     VFooter,
+    VForm,
+    VTextField,
     VList,
     VBtn,
-    VTextarea,
     VIcon,
     VGrid,
     VToolbar,
+    VTextarea,
     VCard,
+    VChip,
+    VCombobox,
+    VExpansionPanel,
     transitions
   },
   iconfont: 'md',
 })
-*/

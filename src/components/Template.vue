@@ -174,7 +174,7 @@ export default {
   computed: {
     variables: function() {
       // filter away duplicate variables
-      return this.template.match(/\$\w+/g).filter((v, i, a) => a.indexOf(v) === i) || []
+      return (this.template.match(/\$\w+/g) || []).filter((v, i, a) => a.indexOf(v) === i)
     }
   },
   data() {
